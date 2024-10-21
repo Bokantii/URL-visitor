@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Retriever</title>
+
+    <style>
+        body {
+            background-color: aqua;
+            color: blueviolet;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>YouTube URL Visitor</h1>
+    <section class="retrieve_URL">
+        <textarea name="url" id="url" placeholder="Paste your URL here"></textarea>
+        <a href="#" id="link" target="_blank">Visit Video</a>
+        <p class="description"></p>
+    </section>
+    <script>
+        const urlTextArea = document.getElementById('url');
+        const urlLink = document.getElementById('link');
+        const description = document.querySelector('.description');
+
+        // Function to update the link's href with the pasted URL and extract 'v' parameter
+        function visitURL() {
+            setTimeout(() => {
+                let pastedURL = urlTextArea.value; // Get the pasted value from the textarea
+                try {
+                    const urlObj = new URL(pastedURL); // Validate URL
+                    const videoId = urlObj.searchParams.get('v'); // Get the 'v' parameter
+                    if (videoId) {
+                        urlLink.setAttribute('href', pastedURL);
+                        urlLink.textContent = `Visit Video: ${pastedURL}`;
+                        description.textContent = `Video ID: ${videoId}`;
+                    } else {
+                        urlLink.setAttribute('href', '#');
+                        urlLink.textContent = "Invalid URL (No 'v' parameter)";
+                        description.textContent = "";
+                    }
+                } catch (error) {
+                    urlLink.setAttribute('href', '#');
+                    urlLink.textContent = "Invalid URL";
+                    description.textContent = "";
+                }
+            }, 10); // Small timeout to ensure pasted content is captured
+        }
+
+        // Add an event listener to detect paste event in the textarea
+        urlTextArea.addEventListener('paste', visitURL);
+    </script>
+</body>
+
+</html>
